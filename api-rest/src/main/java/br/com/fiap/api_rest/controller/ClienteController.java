@@ -37,7 +37,7 @@ public class ClienteController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ClienteResponse>> readClientes(@RequestParam(required = true) int page) {
+    public ResponseEntity<Page<ClienteResponse>> readClientes(@RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(0, 2, Sort.by("categoria").ascending().and(Sort.by("nome").ascending()));
         List<Cliente> clientes = clienteRepository.findAll();
         return new ResponseEntity<>(clienteService.findAll(pageable), HttpStatus.OK);
@@ -51,7 +51,7 @@ public class ClienteController {
         if (cliente.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(clienteService.clienteToResponse(cliente.get()), HttpStatus.OK);
+        return new ResponseEntity<>(clienteService.clienteToResponse(cliente.get(), false), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
